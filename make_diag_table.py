@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """
 
-Generate MOM5 diag_table file
+Generate MOM5 diag_table file from diag_table_source.yaml
+Latest version: https://github.com/COSIMA/make_diag_table
 
 The MOM diag_table format is defined here:
 https://github.com/mom-ocean/MOM5/blob/master/src/shared/diag_manager/diag_table.F90
@@ -42,44 +43,39 @@ indata = yaml.load(open('diag_table_source.yaml', 'r'))
 outstrings = []
 
 # global section
-d = indata['global_defaults']['global_section']
+d = indata['global_defaults']
 outstrings.append(d['title'])
 outstrings.append(' '.join([str(x) for x in d['base_date']]))
-outstrings.append('')
-outstrings.append('#########################################################################################################')
-outstrings.append('#                                                                                                       #')
-outstrings.append('# DO NOT EDIT! Instead, edit diag_table_source.yaml and run make_diag_table.py to re-generate this file #')
-outstrings.append('#                                                                                                       #')
-outstrings.append('#########################################################################################################')
+outstrings.append('''
+#########################################################################################################
+#                                                                                                       #
+# DO NOT EDIT! Instead, edit diag_table_source.yaml and run make_diag_table.py to re-generate this file #
+#                                                                                                       #
+#########################################################################################################
+''')
 
-filenames = {}
+filenames = {}  # list of output files
 
 # interleaved file and field sections
 for k, grp in indata['diag_table'].items():
     # ensure expected entries are present in group
-    print(grp)
     if grp is None:
         grp = dict()
     grp['defaults'] = grp.get('defaults', dict())
     if grp['defaults'] is None:
         grp['defaults'] = dict()
-    grp['defaults']['file_section'] = grp['defaults'].get('file_section', dict())
-    grp['defaults']['field_section'] = grp['defaults'].get('field_section', dict())
     grp['fields'] = grp.get('fields', dict())
     if grp['fields'] is None:
         grp['fields'] = dict()
 
-    outstrings.append('')
-    outstrings.append('# '+k)
+    outstrings.append('\n# '+k)  # use group name as a comment
 
     for field_name, field_dict in grp['fields'].items():
         if field_dict is None:
             field_dict = {}
         # combine field_dict with defaults into one dict f
-        f = {**indata['global_defaults']['file_section'],
-             **indata['global_defaults']['field_section'],
-             **grp['defaults']['file_section'],
-             **grp['defaults']['field_section'],
+        f = {**indata['global_defaults'],
+             **grp['defaults'],
              **field_dict,
              'field_name': field_name}
         if f['output_name'] is None:
@@ -106,7 +102,7 @@ for k, grp in indata['diag_table'].items():
                      f['regional_section'], f['packing']]
         outstrings.append(', '.join([strout(v) for v in fieldline]))
 
-with open('diag_table_TEST', 'w') as f:
+# output outstrings
+with open('diag_table', 'w') as f:
     for line in outstrings:
         f.write('%s\n' % line)
-

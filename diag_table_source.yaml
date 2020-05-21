@@ -1,98 +1,104 @@
-######################################################################################################
-# This yaml file is used by make_diag_table.py to create a diag_table file specifying MOM diagnostics.
+#######################################################################################################
+# This yaml file is used by make_diag_table.py to create a diag_table file specifying MOM5 diagnostics.
+# Latest version: https://github.com/COSIMA/make_diag_table
 #
 # Define the diagnostics you want in the diag_table section below.
 #
 # The MOM diag_table format is defined here:
 # https://github.com/mom-ocean/MOM5/blob/master/src/shared/diag_manager/diag_table.F90
 # and make_diag_table.py uses the data in this yaml file to construct it.
-######################################################################################################
+#######################################################################################################
 
 
 # Define global default settings which will be applied to all diagnostics,
 # unless overridden in diag_table section below, either in defaults or individual fields.
-# You're unlikely to need to change any of this.
+# You're unlikely to need to change any of global_defaults.
 global_defaults:
-    global_section:
-        title: ACCESS-OM2  # any string
-        base_date: [ 1900, 1, 1, 0, 0, 0 ]  # reference time used for the time units. six integers: year, month, day, hour, minute, second
-    file_section:
-        file_name:  # file name is constructed from these, separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
-        # all these components (other than field_name) must be names that can be looked up in global_defaults
-            - file_name_prefix
-            - dimension  # from diag_table section below
-            - field_name  # substituted by field name in diag_table section below
-            - output_freq
-            - output_freq_units
-            - file_name_date
-            - reduction_method  # from diag_table section below (not shown if "average")
-        file_name_prefix: ocean
-        file_name_date: "%4yr%2mo%2dy"  # date in filename; format: %, 1 digit (#digits), one of (yr, mo, dy, hr, mi, sc)
-        file_name_separator: "-"  # used to separate filename components
-        output_freq: 1  # integer: output frequency in output_freq_units (0: every timestep; -1: only at end of run)
-        output_freq_units: months  # time units for output: years, months, days, hours, minutes, or seconds
-        file_format: 1  # integer, must be 1, specifying NetCDF (the only format currently supported)
-        time_axis_units: days  # time units for the output file time axis: years, months, days, hours, minutes, or seconds
-        time_axis_name: time  # must be "time" (case-insensitive)
-        new_file_freq:  # optional integer: frequency (in new_file_freq_units) for closing the existing file, and creating a new file
-        new_file_freq_units:  # time units for new_file_freq: years, months, days, hours, minutes, or seconds (optional; required if and only if new_file_freq specified)
-        start_time:  # Time to start the file for the first time. The format of this string is the same as base_date (optional; requires new_file_freq, new_file_freq_units)
-        file_duration:  # integer: How long file should receive data after start time (optional; requires new_file_freq, new_file_freq_units, start_time)
-        file_duration_units:  # units for file_duration: years, months, days, hours, minutes, or seconds (optional; required if and only if file_duration specified)
-    field_section:
-        module_name: ocean_model
-        field_name:  # set via keys in the fields section of the diag_table section below
-        output_name:  # same as field_name unless overridden
-        # file_name:  # same as file_name in file_section above unless overridden
-        time_sampling: all  # Currently not used.  Please use the string "all".
-        reduction_method: average
-        # reduction_method options:
-        #     average: Average from the last time written to the current time.
-        #     snap: No reduction performed.  Write current time step value only. Becomes "none" in diag_table.
-        #     rms: Calculate the root mean square from the last time written to the current time.
-        #     pow##: Calculate the mean of the power ## from the last time written to the current time.
-        #     min: Minimum value from last write to current time.
-        #     max: Maximum value from last write to current time.
-        #     diurnal##: ## diurnal averages
-        regional_section: none  # string: bounds of the regional section to capture ("none" indicates a global region). String format: lat_min, lat_max, lon_min, lon_max, vert_min, vert_max. Use vert_min = -1 and vert_max = -1 to get the entire vertical axis.
-        packing: 2
-        # packing is the Fortran number KIND of the data written:
-        #     1: double precision
-        #     2: float (single precision)
-        #     4: packed 16-bit integers
-        #     8: packed 1-byte (not tested)
-        dimension: 3d  # descriptor for filename, e.g. 3d, 2d, timeseries
+# global_section:
+    title: ACCESS-OM2  # any string
+    base_date: [ 1900, 1, 1, 0, 0, 0 ]  # reference time used for the time units. six integers: year, month, day, hour, minute, second
+# file section:
+    file_name:  # file name is constructed from these, separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
+    # all these components (other than field_name) must be names that can be looked up in global_defaults
+        - file_name_prefix
+        - file_name_dimension  # from diag_table section below
+        - field_name  # substituted by field name in diag_table section below
+        - output_freq
+        - output_freq_units
+        - file_name_date
+        - reduction_method  # from diag_table section below (not shown if "average")
+    output_freq: 1  # integer: output frequency in output_freq_units (0: every timestep; -1: only at end of run)
+    output_freq_units: months  # time units for output: years, months, days, hours, minutes, or seconds
+    file_format: 1  # integer, must be 1, specifying NetCDF (the only format currently supported)
+    time_axis_units: days  # time units for the output file time axis: years, months, days, hours, minutes, or seconds
+    time_axis_name: time  # must be "time" (case-insensitive)
+    new_file_freq:  # optional integer: frequency (in new_file_freq_units) for closing the existing file, and creating a new file
+    new_file_freq_units:  # time units for new_file_freq: years, months, days, hours, minutes, or seconds (optional; required if and only if new_file_freq specified)
+    start_time:  # Time to start the file for the first time. The format of this string is the same as base_date (optional; requires new_file_freq, new_file_freq_units)
+    file_duration:  # integer: How long file should receive data after start time (optional; requires new_file_freq, new_file_freq_units, start_time)
+    file_duration_units:  # units for file_duration: years, months, days, hours, minutes, or seconds (optional; required if and only if file_duration specified)
+# field section:
+    module_name: ocean_model
+    field_name:  # set via keys in the fields section of the diag_table section below
+    output_name:  # same as field_name unless overridden
+    # file_name:  # same as file_name in file_section above unless overridden in diag_table section below
+    time_sampling: all  # Currently not used.  Please use the string "all".
+    reduction_method: average
+    # reduction_method options:
+    #     average: Average from the last time written to the current time.
+    #     snap: No reduction performed.  Write current time step value only. Becomes "none" in diag_table.
+    #     rms: Calculate the root mean square from the last time written to the current time.
+    #     pow##: Calculate the mean of the power ## from the last time written to the current time.
+    #     min: Minimum value from last write to current time.
+    #     max: Maximum value from last write to current time.
+    #     diurnal##: ## diurnal averages
+    regional_section: none  # string: bounds of the regional section to capture ("none" indicates a global region). String format: lat_min, lat_max, lon_min, lon_max, vert_min, vert_max. Use vert_min = -1 and vert_max = -1 to get the entire vertical axis.
+    packing: 2
+    # packing is the Fortran number KIND of the data written:
+    #     1: double precision
+    #     2: float (single precision)
+    #     4: packed 16-bit integers
+    #     8: packed 1-byte (not tested)
+# extra things for constructing filename:
+    file_name_dimension: 3d  # descriptor for filename, e.g. 3d, 2d, timeseries
+    file_name_prefix: ocean
+    file_name_date: "%4yr%2mo%2dy"  # date in filename; format: %, 1 digit (#digits), one of (yr, mo, dy, hr, mi, sc)
+    file_name_separator: "-"  # used to separate filename components
 
 
-# List the diagnostics you want to output in fields sections here, followed by :
-# If you want to override a default, do so on further-indented line(s) below the
-# diagnostic name. Top-level names in diag_table are arbitrary (they're just 
-# used for comments in the output diag_table) - use these 
-# to group similar diagnostics with shared defaults. Make as many of these as 
-# you like. They should include a defaults and fields subsection.
+#######################################################################################################
+# diag_table section - this defines the diagnostics that will appear in diag_table.
+# 
+# Top-level categories in diag_table have arbitrary names (they're just used for
+# comments in the output diag_table). Make as many of these as you like to group
+# similar diagnostics with shared defaults. Note that each of the top-level
+# categories can have only have one instance of each field name, so if you need
+# multiple outputs of the same field (e.g. as both averages and snapshots), you’ll
+# need to make additional categories.
+# 
+# Within each top-level category there's an optional defaults section and a
+# fields section. The defaults section overrides items in global_defaults for
+# all fields in the category. The field section specifies diagnostic field
+# names. To add a new diagnostic, all you need to do is add its name to the
+# field section in the appropriate category. Each field name can be followed by
+# a dictionary overriding the category and global defaults for that field only.
+# 
 # Some of the available diagnostics are listed here:
 # https://raw.githubusercontent.com/COSIMA/access-om2/master/MOM_diags.txt
 # https://github.com/COSIMA/access-om2/wiki/Technical-documentation#MOM5-diagnostics-list
 diag_table:
-    'nothing':
-    'nodef':
-        fields:
-    'nofields':
-        defaults:
     'grid':
         defaults:  # these can be overridden for individual fields below
-            file_section:
-                file_name: ocean_grid
-                reduction_method: snap
-                output_freq: -1  # Output frequency in output_freq_units (0: every timestep; -1: only at end of run)
+            file_name: ocean_grid
+            reduction_method: snap
+            output_freq: -1  # Output frequency in output_freq_units (0: every timestep; -1: only at end of run)
         fields:
-    # Save ocean grid data once and for all
             geolon_t:
             geolat_t:
             geolon_c:
             geolat_c:
             ht:
-            hu: {file_name: bla}
+            hu:
             dxt:
             dyt:
             dxu:
@@ -104,11 +110,10 @@ diag_table:
             drag_coeff:
     '3d fields':
         defaults:  # these can be overridden for individual fields below
-            field_section:
-                dimension: 3d  # descriptor for filename, e.g. 3d, 2d, timeseries
+            file_name_dimension: 3d  # descriptor for filename, e.g. 3d, 2d, timeseries
         fields:
             temp:
-            pot_temp: {file_name: bla}
+            pot_temp:
             salt:
             age_global:
             u:
@@ -127,8 +132,7 @@ diag_table:
             diff_cbt_t:
     '2d fields':
         defaults:  # these can be overridden for individual fields below
-            field_section:
-                dimension: 2d  # descriptor for filename, e.g. 3d, 2d, timeseries
+            file_name_dimension: 2d  # descriptor for filename, e.g. 3d, 2d, timeseries
         fields:
             sea_level:
             eta_t:
@@ -154,9 +158,8 @@ diag_table:
             pbot_t:
     'timeseries':
         defaults:  # these can be overridden for individual fields below
-            field_section:
-                dimension: timeseries  # descriptor for filename, e.g. 3d, 2d, timeseries
-                packing: 1  # double precision
+            file_name_dimension: timeseries  # descriptor for filename, e.g. 3d, 2d, timeseries
+            packing: 1  # double precision
         fields:
             ke_tot:
             pe_tot:
