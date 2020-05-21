@@ -15,32 +15,34 @@ https://github.com/COSIMA/access-om2/wiki/Technical-documentation#MOM5-diagnosti
 from __future__ import print_function
 import yaml
 
-def set_filename(**kwargs):
-    # define standardised filename as in https://github.com/COSIMA/access-om2/issues/185
-    adjectives = {'years': 'yearly',
-                   'months': 'monthly',
-                   'days': 'daily',
-                   'hours': 'hourly',
-                   'minutes': 'minutely',
-                   'seconds': 'secondly'}
+
+def set_filename(kwargs):
+    """
+    Define standardised filename as in
+    https://github.com/COSIMA/access-om2/issues/185.
+    """
     fn = kwargs['file_name']
     if isinstance(fn, list):
-        if kwargs['reduction_method'] == 'average':  # omit 'average' from filename
-            fn = [v for v in fn if v != 'reduction_method']
         fn = [str(kwargs[k]) for k in fn]
-        fn = [adjectives.get(v, v) for v in fn]
+        fn = [kwargs['file_name_substitutions'].get(v, v) for v in fn]
+        if kwargs['file_name_omit_empty']:
+            fn = [v for v in fn if v != '']
         return kwargs['file_name_separator'].join(fn)
     else:
         return fn
 
+
 def strout(v):
+    """Return string representation, with double quotes around strings."""
     if isinstance(v, str):
         return '"' + v + '"'
     else:
         return str(v)
 
+
 indata = yaml.load(open('diag_table_source.yaml', 'r'))
-outstrings = []
+outstrings = []  # strings to write to diag_table
+filenames = {}  # diagnostic output filenames
 
 # global section
 d = indata['global_defaults']
@@ -53,8 +55,6 @@ outstrings.append('''
 #                                                                                                       #
 #########################################################################################################
 ''')
-
-filenames = {}  # list of output files
 
 # interleaved file and field sections
 for k, grp in indata['diag_table'].items():
@@ -71,34 +71,40 @@ for k, grp in indata['diag_table'].items():
     outstrings.append('\n# '+k)  # use group name as a comment
 
     for field_name, field_dict in grp['fields'].items():
+
         if field_dict is None:
             field_dict = {}
+
         # combine field_dict with defaults into one dict f
         f = {**indata['global_defaults'],
              **grp['defaults'],
              **field_dict,
              'field_name': field_name}
+
         if f['output_name'] is None:
             f['output_name'] = f['field_name']
-        fname = set_filename(**f)
+
+        fname = set_filename(f)
         if fname not in filenames:  # to ensure that each filename is specified once only
-            fnameline = [ fname, f['output_freq'], f['output_freq_units'],
+            fnameline = [fname, f['output_freq'], f['output_freq_units'],
                          f['file_format'], f['time_axis_units'], f['time_axis_name']]
             if 'new_file_freq' in f:
-                if f['new_file_freq'] != None:
+                if f['new_file_freq'] is not None:
                     fnameline.extend([f['new_file_freq'], f['new_file_freq_units']])
                     if 'start_time' in f:
-                        if f['start_time'] != None:
+                        if f['start_time'] is not None:
                             fnameline.append(' '.join([str(x) for x in f['start_time']]))
                             if 'file_duration' in f:
-                                if f['file_duration'] != None:
+                                if f['file_duration'] is not None:
                                     fnameline.extend([f['file_duration'], f['file_duration_units']])
             outstrings.append(', '.join([strout(v) for v in fnameline]))
             filenames[fname] = None
+
         if f['reduction_method'] == 'snap':
             f['reduction_method'] = 'none'
-        fieldline = [f['module_name'], f['field_name'], f['output_name'], fname,
-                     f['time_sampling'], f['reduction_method'],
+
+        fieldline = [f['module_name'], f['field_name'], f['output_name'],
+                     fname, f['time_sampling'], f['reduction_method'],
                      f['regional_section'], f['packing']]
         outstrings.append(', '.join([strout(v) for v in fieldline]))
 
