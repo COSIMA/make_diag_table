@@ -16,18 +16,17 @@ from __future__ import print_function
 import yaml
 
 
-def set_filename(kwargs):
+def set_filename(indict):
     """
-    Define standardised filename as in
-    https://github.com/COSIMA/access-om2/issues/185.
+    Create standardised filename as defined in 'file_name' entry.
     """
-    fn = kwargs['file_name']
+    fn = indict['file_name']
     if isinstance(fn, list):
-        fn = [str(kwargs[k]) for k in fn]
-        fn = [kwargs['file_name_substitutions'].get(v, v) for v in fn]
-        if kwargs['file_name_omit_empty']:
+        fn = [str(indict[k]) for k in fn]
+        fn = [indict['file_name_substitutions'].get(v, v) for v in fn]
+        if indict['file_name_omit_empty']:
             fn = [v for v in fn if v != '']
-        return kwargs['file_name_separator'].join(fn)
+        return indict['file_name_separator'].join(fn)
     else:
         return fn
 
@@ -53,8 +52,7 @@ outstrings.append('''
 #                                                                                                       #
 # DO NOT EDIT! Instead, edit diag_table_source.yaml and run make_diag_table.py to re-generate this file #
 #                                                                                                       #
-#########################################################################################################
-''')
+#########################################################################################################''')
 
 # interleaved file and field sections
 for k, grp in indata['diag_table'].items():
@@ -68,7 +66,7 @@ for k, grp in indata['diag_table'].items():
     if grp['fields'] is None:
         grp['fields'] = dict()
 
-    outstrings.append('\n# '+k)  # use group name as a comment
+    outstrings.append('\n\n# '+ k)  # use group name as a comment
 
     for field_name, field_dict in grp['fields'].items():
 
@@ -97,6 +95,7 @@ for k, grp in indata['diag_table'].items():
                             if 'file_duration' in f:
                                 if f['file_duration'] is not None:
                                     fnameline.extend([f['file_duration'], f['file_duration_units']])
+            outstrings.append('')
             outstrings.append(', '.join([strout(v) for v in fnameline]))
             filenames[fname] = None
 
