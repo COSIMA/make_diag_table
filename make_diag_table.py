@@ -38,6 +38,17 @@ def set_filename(indict):
     """
     fn = indict['file_name']
     if isinstance(fn, list):
+        fnd = indict['file_name_date_section']
+        if isinstance(fnd, list):
+            fnd = [str(indict[k]) for k in fnd]
+            fnd = [indict['file_name_substitutions'].get(v, v) for v in fnd]
+            if indict['file_name_omit_empty']:
+                fnd = [v for v in fnd if v != '']
+            if fnd[-1][0] == '%':
+                # omit _ since date specification already supplies leading _
+                indict['file_name_date_section'] = '_'.join(fnd[0:-1]) + fnd[-1]
+            else:
+                indict['file_name_date_section'] = '_'.join(fnd)
         fn = [str(indict[k]) for k in fn]
         fn = [indict['file_name_substitutions'].get(v, v) for v in fn]
         if indict['file_name_omit_empty']:
@@ -115,8 +126,10 @@ for k, grp in indata['diag_table'].items():
             outstrings.append(', '.join([strout(v) for v in fnameline]))
             filenames[fname] = None
 
-        if f['reduction_method'] == 'snap':
+        if f['reduction_method'] in ['snap', False]:
             f['reduction_method'] = 'none'
+        if f['reduction_method'] in ['mean', True]:
+            f['reduction_method'] = 'average'
 
         fieldline = [f['module_name'], f['field_name'], f['output_name'],
                      fname, f['time_sampling'], f['reduction_method'],

@@ -20,13 +20,15 @@ global_defaults:
     file_name:  # file name (without trailing ".nc") is constructed from these components,
     # separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
     # All these components (other than field_name) must be names that exist in global_defaults.
+    # If file_name_date or file_name_date_section are used, it must be the last item.
         - file_name_prefix
         - file_name_dimension
         - field_name  # substituted by field name in diag_table section below
         - output_freq
         - output_freq_units
+        - reduction_method
         - file_name_date
-        - reduction_method  # from diag_table section below (not shown if "average")
+        # - file_name_date_section
     output_freq: 1  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
     output_freq_units: months  # time units for output: years, months, days, hours, minutes, or seconds
     file_format: 1  # integer, must be 1, specifying NetCDF (the only format currently supported)
@@ -43,10 +45,10 @@ global_defaults:
     output_name:  # same as field_name unless overridden
     # file_name:  # same as file_name in file_section above unless overridden in diag_table section below
     time_sampling: all  # Currently not used.  Please use the string "all".
-    reduction_method: average
+    reduction_method: true
     # reduction_method options:
-    #     average: Average from the last time written to the current time.
-    #     none or snap: No reduction performed.  Write current time step value only. Becomes "none" in diag_table.
+    #     average or mean or true: Average from the last time written to the current time. Becomes "average" in diag_table.
+    #     none or snap or false: No reduction performed.  Write current time step value only. Becomes "none" in diag_table.
     #     rms: Calculate the root mean square from the last time written to the current time.
     #     pow##: Calculate the mean of the power ## from the last time written to the current time.
     #     min: Minimum value from last write to current time.
@@ -62,7 +64,7 @@ global_defaults:
 # extra things for constructing filename:
     file_name_dimension: 3d  # descriptor for filename, e.g. 3d, 2d, scalar
     file_name_prefix: ocean
-    file_name_date: "%4yr%2mo%2dy"  # run date/time of file opening; format: %, 1 digit (#digits), one of (yr, mo, dy, hr, mi, sc); date/time components will be separated by _ in filename.
+    file_name_date: "ymd%4yr%2mo%2dy"  # run date/time of file opening; format: %, 1 digit (#digits), one of (yr, mo, dy, hr, mi, sc); date/time components will be separated by _ in filename.
     file_name_separator: "-"  # used to separate filename components; best not to use "_" to avoid confusion with fields and dates
     file_name_omit_empty: true  # whether to omit empty filename components to avoid duplicate file_name_separator
     file_name_substitutions:  # string replacements for filename components
@@ -71,8 +73,15 @@ global_defaults:
         days: daily
         hours: hourly
         none: snap
-        average: ""
-        None: ""
+        'False': snap
+        average: mean
+        'True': mean
+        None: ""  # for empty items
+    file_name_date_section:  # These are separated by "_". If file_name_date is used, it must be the last item.
+        - output_freq
+        - output_freq_units
+        - reduction_method
+        - file_name_date
 
 
 #######################################################################################################
@@ -216,4 +225,8 @@ diag_table:
             total_ocean_fprec_melt_heat:
             total_ocean_calving_melt_heat:
             total_ocean_sens_heat:
-
+    'snapshots':
+        defaults:  # these can be overridden for individual fields below
+            reduction_method: snap
+        fields:
+            temp:
