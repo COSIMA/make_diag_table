@@ -13,7 +13,23 @@ https://github.com/COSIMA/access-om2/wiki/Technical-documentation#MOM5-diagnosti
 """
 
 from __future__ import print_function
-import yaml
+import sys
+
+try:
+    assert sys.version_info >= (3, 5)  # need python >= 3.5 for combining defaults
+except AssertionError:
+    print('\nFatal error: Python version must be >=3.5')
+    print('On NCI, do the following and try again:')
+    print('   module use /g/data/hh5/public/modules; module load conda/analysis3\n')
+    raise
+
+try:
+    import yaml
+except ModuleNotFoundError:
+    print('\nFatal error: pyyaml package not found.')
+    print('On NCI, do the following and try again:')
+    print('   module use /g/data/hh5/public/modules; module load conda/analysis3\n')
+    raise
 
 
 def set_filename(indict):
@@ -39,7 +55,7 @@ def strout(v):
         return str(v)
 
 
-indata = yaml.load(open('diag_table_source.yaml', 'r'))
+indata = yaml.load(open('diag_table_source.yaml', 'r'), Loader=yaml.SafeLoader)
 outstrings = []  # strings to write to diag_table
 filenames = {}  # diagnostic output filenames
 
