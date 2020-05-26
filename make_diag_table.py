@@ -50,6 +50,7 @@ def set_filename(indict):
             else:
                 indict['file_name_date_section'] = '_'.join(fnd)
         fn = [str(indict[k]) for k in fn]
+# TODO: make substitutions specific to particular components of indict['file_name']?
         fn = [indict['file_name_substitutions'].get(v, v) for v in fn]
         if indict['file_name_omit_empty']:
             fn = [v for v in fn if v != '']

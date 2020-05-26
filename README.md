@@ -2,7 +2,7 @@
 
 Python script to generate a [MOM5](https://github.com/mom-ocean/MOM5) `diag_table`.
 
-Edit `diag_table_source.yaml`, run `make_diag_table.py` and see a correctly-formatted `diag_table` appear before your very eyes, with standardized filenames as in https://github.com/COSIMA/access-om2/issues/185.
+Edit `diag_table_source.yaml` and run `make_diag_table.py` to create a `diag_table` with standardized filenames as in https://github.com/COSIMA/access-om2/issues/185. **Warning:** this will overwrite any existing `diag_table`.
 
 Adding or removing diagnostics is as simple as adding or removing their names in the appropriate `fields` section in the `diag_table` part of `diag_table_source.yaml`.
 
