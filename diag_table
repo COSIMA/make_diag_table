@@ -527,25 +527,25 @@ ACCESS-OM2-01
 "ocean_model", "pprod_gross_2d", "pprod_gross_2d", "oceanbgc-2d-pprod_gross_2d-1-monthly-mean-ym%4yr%2mo", "all", "average", "none", 2
 
 
-# 5-day-mean 3d prognostic BGC fields
+# daily-mean-sampled-every-five-days 3d prognostic BGC fields
 
-"oceanbgc-3d-adic-5-daily-mean-ym%4yr%2mo", 5, "days", 1, "days", "time", 1, "months"
-"ocean_model", "adic", "adic", "oceanbgc-3d-adic-5-daily-mean-ym%4yr%2mo", "all", "average", "none", 2
+"oceanbgc-3d-adic-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", 5, "days", 1, "days", "time", 1, "days", "1958 1 1 0 0 0", 1, "days"
+"ocean_model", "adic", "adic", "oceanbgc-3d-adic-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", "all", "average", "none", 2
 
-"oceanbgc-3d-dic-5-daily-mean-ym%4yr%2mo", 5, "days", 1, "days", "time", 1, "months"
-"ocean_model", "dic", "dic", "oceanbgc-3d-dic-5-daily-mean-ym%4yr%2mo", "all", "average", "none", 2
+"oceanbgc-3d-dic-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", 5, "days", 1, "days", "time", 1, "days", "1958 1 1 0 0 0", 1, "days"
+"ocean_model", "dic", "dic", "oceanbgc-3d-dic-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", "all", "average", "none", 2
 
-"oceanbgc-3d-o2-5-daily-mean-ym%4yr%2mo", 5, "days", 1, "days", "time", 1, "months"
-"ocean_model", "o2", "o2", "oceanbgc-3d-o2-5-daily-mean-ym%4yr%2mo", "all", "average", "none", 2
+"oceanbgc-3d-o2-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", 5, "days", 1, "days", "time", 1, "days", "1958 1 1 0 0 0", 1, "days"
+"ocean_model", "o2", "o2", "oceanbgc-3d-o2-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", "all", "average", "none", 2
 
-"oceanbgc-3d-no3-5-daily-mean-ym%4yr%2mo", 5, "days", 1, "days", "time", 1, "months"
-"ocean_model", "no3", "no3", "oceanbgc-3d-no3-5-daily-mean-ym%4yr%2mo", "all", "average", "none", 2
+"oceanbgc-3d-no3-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", 5, "days", 1, "days", "time", 1, "days", "1958 1 1 0 0 0", 1, "days"
+"ocean_model", "no3", "no3", "oceanbgc-3d-no3-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", "all", "average", "none", 2
 
-"oceanbgc-3d-fe-5-daily-mean-ym%4yr%2mo", 5, "days", 1, "days", "time", 1, "months"
-"ocean_model", "fe", "fe", "oceanbgc-3d-fe-5-daily-mean-ym%4yr%2mo", "all", "average", "none", 2
+"oceanbgc-3d-fe-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", 5, "days", 1, "days", "time", 1, "days", "1958 1 1 0 0 0", 1, "days"
+"ocean_model", "fe", "fe", "oceanbgc-3d-fe-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", "all", "average", "none", 2
 
-"oceanbgc-3d-phy-5-daily-mean-ym%4yr%2mo", 5, "days", 1, "days", "time", 1, "months"
-"ocean_model", "phy", "phy", "oceanbgc-3d-phy-5-daily-mean-ym%4yr%2mo", "all", "average", "none", 2
+"oceanbgc-3d-phy-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", 5, "days", 1, "days", "time", 1, "days", "1958 1 1 0 0 0", 1, "days"
+"ocean_model", "phy", "phy", "oceanbgc-3d-phy-5-daily-mean-1-daily-ymd%4yr%2mo%2dy", "all", "average", "none", 2
 
 
 # daily 2d prognostic BGC fields
