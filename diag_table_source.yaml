@@ -455,12 +455,12 @@ diag_table:
         defaults:  # these can be overridden for individual fields below
             file_name_prefix: oceanbgc
             file_name_dimension: 3d  # descriptor for filename, e.g. 3d, 2d, scalar
-            output_freq: 5  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
+            output_freq: 1  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
             output_freq_units: days  # time units for output: years, months, days, hours, minutes, or seconds
             file_name_date: "ymd%4yr%2mo%2dy"
             file_duration: 1
             file_duration_units: days
-            new_file_freq: 1
+            new_file_freq: 5
             new_file_freq_units: days
             start_time: [ 1958, 1, 1, 0, 0, 0 ] # set_nextdate
             file_name:
