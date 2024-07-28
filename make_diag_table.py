@@ -54,9 +54,24 @@ def set_filename(indict):
         fn = [indict['file_name_substitutions'].get(v, v) for v in fn]
         if indict['file_name_omit_empty']:
             fn = [v for v in fn if v != '']
-        return indict['file_name_separator'].join(fn)
+        # separators can be a single value or a list 
+        separators = indict['file_name_separator']
+        return apply_separators(fn,separators)
     else:
         return fn
+
+
+def apply_separators(filename,separators):
+    """
+    Update a file name with a single or a list of multiple separators between components
+    """
+    if isinstance(separators, list):     # a list    
+        updated_filename = filename[0]
+        for i in range(1,len(filename)):
+            updated_filename += separators[i-1] + filename[i]
+    else:                                # single value
+        updated_filename = separators.join(filename)
+    return updated_filename
 
 
 def strout(v):
