@@ -6,6 +6,7 @@
 #
 # The MOM diag_table format is defined here:
 # https://github.com/mom-ocean/MOM5/blob/master/src/shared/diag_manager/diag_table.F90
+# https://mom6.readthedocs.io/en/main/api/generated/pages/Diagnostics.html
 #######################################################################################################
 
 
