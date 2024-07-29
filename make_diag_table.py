@@ -38,17 +38,6 @@ def set_filename(indict):
     """
     fn = indict['file_name']
     if isinstance(fn, list):
-        fnd = indict['file_name_date_section']
-        if isinstance(fnd, list):
-            fnd = [str(indict[k]) for k in fnd]
-            fnd = [indict['file_name_substitutions'].get(v, v) for v in fnd]
-            if indict['file_name_omit_empty']:
-                fnd = [v for v in fnd if v != '']
-            if fnd[-1][0] == '%':
-                # omit _ since date specification already supplies leading _
-                indict['file_name_date_section'] = '_'.join(fnd[0:-1]) + fnd[-1]
-            else:
-                indict['file_name_date_section'] = '_'.join(fnd)
         fn = [str(indict[k]) for k in fn]
 # TODO: make substitutions specific to particular components of indict['file_name']?
         fn = [indict['file_name_substitutions'].get(v, v) for v in fn]

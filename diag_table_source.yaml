@@ -20,7 +20,7 @@ global_defaults:
     file_name:  # file name (without trailing ".nc") is constructed from these components,
     # separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
     # All these components (other than field_name) must be names that exist in global_defaults.
-    # If file_name_date or file_name_date_section are used, it must be the last item.
+    # If file_name_date is used, it must be the last item.
         - file_name_prefix
         - file_name_dimension
         - field_name  # substituted by field name in diag_table section below
@@ -28,7 +28,6 @@ global_defaults:
         - output_freq_units
         - reduction_method
         - file_name_date
-        # - file_name_date_section
     output_freq: 1  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
     output_freq_units: months  # time units for output: years, months, days, hours, minutes, or seconds
     file_format: 1  # integer, must be 1, specifying NetCDF (the only format currently supported)
@@ -77,11 +76,6 @@ global_defaults:
         average: mean
         'True': mean
         None: ""  # for empty items
-    file_name_date_section:  # These are separated by "_". If file_name_date is used, it must be the last item.
-        - output_freq
-        - output_freq_units
-        - reduction_method
-        - file_name_date
 
 
 #######################################################################################################
