@@ -16,7 +16,7 @@ from __future__ import print_function
 import sys
 
 try:
-    assert sys.version_info >= (3, 5)  # need python >= 3.5 for combining defaults
+    assert sys.version_info >= (3, 7)  # need python >= 3.7 to preserve dict order
 except AssertionError:
     print('\nFatal error: Python version must be >=3.5')
     print('On NCI, do the following and try again:')
@@ -34,27 +34,43 @@ except ModuleNotFoundError:
 
 def set_filename(indict):
     """
-    Create standardised filename as defined in 'file_name' entry.
+    Create standardised filename as defined in 'file_name' entry of indict.
+    If indict['file_name'] is a list, construct string to return, otherwise
+    return indict['file_name'].
+    If indict['file_name'] is a list, its elements can be a mixture of
+    strings and dictionaries.
+    String elements will be separated by file_name_separator.
+    Dictionary elements must have one element, whose key is a string and whose
+    value is a list of strings, which will be concatenated with key preceding
+    (separating) each one, i.e. the key is a custom separator for the items in
+    the list.
     """
-    fn = indict['file_name']
+    def get_subitem(item):
+        sitem = str(indict[item])
+        return indict['file_name_substitutions'].get(sitem, sitem)
+         
+    fn = indict['file_name']             
     if isinstance(fn, list):
-        fnd = indict['file_name_date_section']
-        if isinstance(fnd, list):
-            fnd = [str(indict[k]) for k in fnd]
-            fnd = [indict['file_name_substitutions'].get(v, v) for v in fnd]
-            if indict['file_name_omit_empty']:
-                fnd = [v for v in fnd if v != '']
-            if fnd[-1][0] == '%':
-                # omit _ since date specification already supplies leading _
-                indict['file_name_date_section'] = '_'.join(fnd[0:-1]) + fnd[-1]
+        elements = []
+        for item in fn:
+            if isinstance(item, dict):  # use dict key as separator (assume exactly one key-value pair)
+                for sep, ditems in item.items():
+                    for ditem in ditems:
+                        subitem = get_subitem(ditem)
+                        if indict['file_name_omit_empty'] and subitem == '':
+                            continue
+                        if len(elements) > 0:
+                            elements.append(str(sep))
+                        elements.append(subitem)
+                    break
             else:
-                indict['file_name_date_section'] = '_'.join(fnd)
-        fn = [str(indict[k]) for k in fn]
-# TODO: make substitutions specific to particular components of indict['file_name']?
-        fn = [indict['file_name_substitutions'].get(v, v) for v in fn]
-        if indict['file_name_omit_empty']:
-            fn = [v for v in fn if v != '']
-        return indict['file_name_separator'].join(fn)
+                subitem = get_subitem(ditem)
+                if indict['file_name_omit_empty'] and subitem == '':
+                    continue
+                if len(elements) > 0:
+                    elements.append(indict['file_name_separator'])
+                elements.append(subitem)
+        return ''.join(elements)
     else:
         return fn
 

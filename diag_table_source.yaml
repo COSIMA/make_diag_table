@@ -6,6 +6,7 @@
 #
 # The MOM diag_table format is defined here:
 # https://github.com/mom-ocean/MOM5/blob/master/src/shared/diag_manager/diag_table.F90
+# https://mom6.readthedocs.io/en/main/api/generated/pages/Diagnostics.html
 #######################################################################################################
 
 
@@ -17,18 +18,25 @@ global_defaults:
     title: ACCESS-OM2  # any string
     base_date: [ 1900, 1, 1, 0, 0, 0 ]  # reference time used for the time units. six integers: year, month, day, hour, minute, second
 # file section:
-    file_name:  # file name (without trailing ".nc") is constructed from these components,
-    # separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
-    # All these components (other than field_name) must be names that exist in global_defaults.
-    # If file_name_date or file_name_date_section are used, it must be the last item.
+    file_name:  # String, or list of components, for file name (without trailing ".nc").
+    # If a list, its elements are a mixture of strings and dictionaries.
+    # String list elements are concatenated, each preceded by file_name_separator.
+    # Dictionary list elements must have one key-value pair; the value is a list
+    # containing 1 or more strings to be concatenated, each preceded by the key
+    # (a string) instead of file_name_separator. The key may be an empty string,
+    # which is useful if file_name_date begins with %, since FMS prepends _ .
+    # All filename list string elements (other than field_name) must exist as keys in global_defaults.
+    # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
+    # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
+    # A separator is not used prior to the first item.
         - file_name_prefix
         - file_name_dimension
         - field_name  # substituted by field name in diag_table section below
         - output_freq
-        - output_freq_units
+        - '':
+            - output_freq_units
         - reduction_method
         - file_name_date
-        # - file_name_date_section
     output_freq: 1  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
     output_freq_units: months  # time units for output: years, months, days, hours, minutes, or seconds
     file_format: 1  # integer, must be 1, specifying NetCDF (the only format currently supported)
@@ -43,7 +51,7 @@ global_defaults:
     module_name: ocean_model
     field_name:  # set via keys in the fields section of the diag_table section below
     output_name:  # same as field_name unless overridden
-    # file_name:  # same as file_name in file_section above unless overridden in diag_table section below
+    # file_name:  # same as file_name in file section above unless overridden in diag_table section below
     time_sampling: all  # Currently not used.  Please use the string "all".
     reduction_method: mean  # mean, snap, rms, pow##, min, max, or diurnal##
     # reduction_method options:
@@ -77,11 +85,6 @@ global_defaults:
         average: mean
         'True': mean
         None: ""  # for empty items
-    file_name_date_section:  # These are separated by "_". If file_name_date is used, it must be the last item.
-        - output_freq
-        - output_freq_units
-        - reduction_method
-        - file_name_date
 
 
 #######################################################################################################
@@ -108,9 +111,17 @@ diag_table:
     'static 2d grid data':
         defaults:  # these can be overridden for individual fields below
             file_name_dimension: 2d  # descriptor for filename, e.g. 3d, 2d, scalar
-            file_name:  # file name (without trailing ".nc") is constructed from these components,
-            # separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
-            # All these components (other than field_name) must be names that exist in global_defaults.
+            file_name:  # String, or list of components, for file name (without trailing ".nc").
+            # If a list, its elements are a mixture of strings and dictionaries.
+            # String list elements are concatenated, each preceded by file_name_separator.
+            # Dictionary list elements must have one key-value pair; the value is a list
+            # containing 1 or more strings to be concatenated, each preceded by the key
+            # (a string) instead of file_name_separator. The key may be an empty string,
+            # which is useful if file_name_date begins with %, since FMS prepends _ .
+            # All filename list string elements (other than field_name) must exist as keys in global_defaults.
+            # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
+            # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
+            # A separator is not used prior to the first item.
                 - file_name_prefix
                 - file_name_dimension
                 - field_name  # substituted by field name in fields section below
@@ -277,9 +288,16 @@ diag_table:
     'monthly scalar timeseries':
         defaults:  # these can be overridden for individual fields below
             file_name_dimension: scalar  # descriptor for filename, e.g. 3d, 2d, scalar
-            file_name:  # file name (without trailing ".nc") is constructed from these components,
-            # separated by file_name_separator, as per https://github.com/COSIMA/access-om2/issues/185
-            # All these components (other than field_name) must be names that exist in global_defaults.
+            file_name:  # String, or list of components, for file name (without trailing ".nc").
+            # If a list, its elements are a mixture of strings and dictionaries.
+            # String list elements are concatenated, each preceded by file_name_separator.
+            # Dictionary list elements must have one key-value pair; the value is a list
+            # containing 1 or more strings to be concatenated, each preceded by the key
+            # (a string, which may be empty) instead of file_name_separator.
+            # All filename list string elements (other than field_name) must exist as keys in global_defaults.
+            # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
+            # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
+            # Separators are not used prior to the first item or an item beginning with % (since FMS supplies a leading _ in that case).
                 - file_name_prefix
                 - file_name_dimension
                 - output_freq
