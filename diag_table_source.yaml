@@ -23,11 +23,12 @@ global_defaults:
     # String list elements are concatenated, each preceded by file_name_separator.
     # Dictionary list elements must have one key-value pair; the value is a list
     # containing 1 or more strings to be concatenated, each preceded by the key
-    # (a string, which may be empty) instead of file_name_separator.
+    # (a string) instead of file_name_separator. The key may be an empty string,
+    # which is useful if file_name_date begins with %, since FMS prepends _ .
     # All filename list string elements (other than field_name) must exist as keys in global_defaults.
     # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
     # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
-    # Separators are not used prior to the first item or an item beginning with % (since FMS supplies a leading _ in that case).
+    # A separator is not used prior to the first item.
         - file_name_prefix
         - file_name_dimension
         - field_name  # substituted by field name in diag_table section below
@@ -115,11 +116,12 @@ diag_table:
             # String list elements are concatenated, each preceded by file_name_separator.
             # Dictionary list elements must have one key-value pair; the value is a list
             # containing 1 or more strings to be concatenated, each preceded by the key
-            # (a string, which may be empty) instead of file_name_separator.
+            # (a string) instead of file_name_separator. The key may be an empty string,
+            # which is useful if file_name_date begins with %, since FMS prepends _ .
             # All filename list string elements (other than field_name) must exist as keys in global_defaults.
             # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
             # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
-            # Separators are not used prior to the first item or an item beginning with % (since FMS supplies a leading _ in that case).
+            # A separator is not used prior to the first item.
                 - file_name_prefix
                 - file_name_dimension
                 - field_name  # substituted by field name in fields section below

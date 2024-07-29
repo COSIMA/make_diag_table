@@ -56,7 +56,7 @@ def set_filename(indict):
                         subitem = indict['file_name_substitutions'].get(sitem, sitem)
                         if indict['file_name_omit_empty'] and subitem == '':
                             continue
-                        if len(elements) > 0 and subitem[0] != '%':  # omit separator since FMS already supplies leading _ for date specification
+                        if len(elements) > 0:
                             elements.append(str(sep))
                         elements.append(subitem)
                     break
@@ -65,7 +65,7 @@ def set_filename(indict):
                 subitem = indict['file_name_substitutions'].get(sitem, sitem)
                 if indict['file_name_omit_empty'] and subitem == '':
                     continue
-                if len(elements) > 0 and subitem[0] != '%':  # omit separator since FMS already supplies leading _ for date specification
+                if len(elements) > 0:
                     elements.append(indict['file_name_separator'])
                 elements.append(subitem)
         return ''.join(elements)
