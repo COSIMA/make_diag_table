@@ -16,7 +16,7 @@ from __future__ import print_function
 import sys
 
 try:
-    assert sys.version_info >= (3, 5)  # need python >= 3.5 for combining defaults
+    assert sys.version_info >= (3, 7)  # need python >= 3.7 to preserve dict order
 except AssertionError:
     print('\nFatal error: Python version must be >=3.5')
     print('On NCI, do the following and try again:')
