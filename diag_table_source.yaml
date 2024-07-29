@@ -28,7 +28,6 @@ global_defaults:
     # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
     # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
     # Separators are not used prior to the first item or an item beginning with % (since FMS supplies a leading _ in that case).
-    # If item contains % (e.g. file_name_date), it must be the last item.
         - file_name_prefix
         - file_name_dimension
         - field_name  # substituted by field name in diag_table section below
@@ -121,7 +120,6 @@ diag_table:
             # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
             # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
             # Separators are not used prior to the first item or an item beginning with % (since FMS supplies a leading _ in that case).
-            # If item contains % (e.g. file_name_date), it must be the last item.
                 - file_name_prefix
                 - file_name_dimension
                 - field_name  # substituted by field name in fields section below
@@ -298,7 +296,6 @@ diag_table:
             # Key values are looked up, converted to strings and then substituted using file_name_substitutions.
             # Empty strings (and their preceding separator) are ignored if file_name_omit_empty is true.
             # Separators are not used prior to the first item or an item beginning with % (since FMS supplies a leading _ in that case).
-            # If item contains % (e.g. file_name_date), it must be the last item.
                 - file_name_prefix
                 - file_name_dimension
                 - output_freq
