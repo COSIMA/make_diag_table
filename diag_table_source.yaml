@@ -32,7 +32,8 @@ global_defaults:
         - file_name_dimension
         - field_name  # substituted by field name in diag_table section below
         - output_freq
-        - output_freq_units
+        - '':
+            - output_freq_units
         - reduction_method
         - file_name_date
     output_freq: 1  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
