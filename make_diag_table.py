@@ -64,7 +64,7 @@ def set_filename(indict):
                         elements.append(subitem)
                     break
             else:
-                subitem = get_subitem(ditem)
+                subitem = get_subitem(item)
                 if indict['file_name_omit_empty'] and subitem == '':
                     continue
                 if len(elements) > 0:
