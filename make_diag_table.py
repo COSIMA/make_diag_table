@@ -34,16 +34,41 @@ except ModuleNotFoundError:
 
 def set_filename(indict):
     """
-    Create standardised filename as defined in 'file_name' entry.
+    Create standardised filename as defined in 'file_name' entry of indict.
+    If indict['file_name'] is a list, construct string to return, otherwise
+    return indict['file_name'].
+    If indict['file_name'] is a list, its elements can be a mixture of
+    strings and dictionaries.
+    String elements will be separated by file_name_separator.
+    Dictionary elements must have one element, whose key is a string and whose
+    value is a list of strings, which will be concatenated with key preceding
+    (separating) each one, i.e. the key is a custom separator for the items in
+    the list.
     """
     fn = indict['file_name']
     if isinstance(fn, list):
-        fn = [str(indict[k]) for k in fn]
-# TODO: make substitutions specific to particular components of indict['file_name']?
-        fn = [indict['file_name_substitutions'].get(v, v) for v in fn]
-        if indict['file_name_omit_empty']:
-            fn = [v for v in fn if v != '']
-        return indict['file_name_separator'].join(fn)
+        elements = []
+        for item in fn:
+            if isinstance(item, dict):  # use dict key as separator (assume exactly one key-value pair)
+                for sep, ditems in item.items():
+                    for ditem in ditems:
+                        sitem = str(indict[ditem])
+                        subitem = indict['file_name_substitutions'].get(sitem, sitem)
+                        if indict['file_name_omit_empty'] and subitem == '':
+                            continue
+                        if len(elements) > 0 and subitem[0] != '%':  # omit separator since FMS already supplies leading _ for date specification
+                            elements.append(str(sep))
+                        elements.append(subitem)
+                    break
+            else:
+                sitem = str(indict[item])
+                subitem = indict['file_name_substitutions'].get(sitem, sitem)
+                if indict['file_name_omit_empty'] and subitem == '':
+                    continue
+                if len(elements) > 0 and subitem[0] != '%':  # omit separator since FMS already supplies leading _ for date specification
+                    elements.append(indict['file_name_separator'])
+                elements.append(subitem)
+        return ''.join(elements)
     else:
         return fn
 
