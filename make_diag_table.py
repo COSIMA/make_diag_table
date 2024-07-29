@@ -45,15 +45,18 @@ def set_filename(indict):
     (separating) each one, i.e. the key is a custom separator for the items in
     the list.
     """
-    fn = indict['file_name']
+    def get_subitem(item):
+        sitem = str(indict[item])
+        return indict['file_name_substitutions'].get(sitem, sitem)
+         
+    fn = indict['file_name']             
     if isinstance(fn, list):
         elements = []
         for item in fn:
             if isinstance(item, dict):  # use dict key as separator (assume exactly one key-value pair)
                 for sep, ditems in item.items():
                     for ditem in ditems:
-                        sitem = str(indict[ditem])
-                        subitem = indict['file_name_substitutions'].get(sitem, sitem)
+                        subitem = get_subitem(ditem)
                         if indict['file_name_omit_empty'] and subitem == '':
                             continue
                         if len(elements) > 0:
@@ -61,8 +64,7 @@ def set_filename(indict):
                         elements.append(subitem)
                     break
             else:
-                sitem = str(indict[item])
-                subitem = indict['file_name_substitutions'].get(sitem, sitem)
+                subitem = get_subitem(ditem)
                 if indict['file_name_omit_empty'] and subitem == '':
                     continue
                 if len(elements) > 0:
