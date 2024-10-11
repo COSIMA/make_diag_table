@@ -1,5 +1,5 @@
 #######################################################################################################
-# This yaml file is used by make_diag_table.py to create a diag_table file specifying MOM5 diagnostics.
+# This yaml file is used by make_diag_table.py to create a diag_table file specifying MOM diagnostics.
 # Latest version: https://github.com/COSIMA/make_diag_table
 #
 # Define the diagnostics you want in the diag_table section below.
@@ -105,9 +105,11 @@ global_defaults:
 # field section in the appropriate category. Each field name can be followed by
 # a dictionary overriding the category and global defaults for that field only.
 # 
-# Some of the available diagnostics are listed here:
+# Some of the available MOM5 diagnostics are listed here:
 # https://raw.githubusercontent.com/COSIMA/access-om2/master/MOM_diags.txt
 # https://github.com/COSIMA/access-om2/wiki/Technical-documentation#MOM5-diagnostics-list
+# MOM6 diagnostics are output in available_diags.* when you run the model - see
+# https://mom6.readthedocs.io/en/main/api/generated/pages/Diagnostics.html
 diag_table:
     'static 2d grid data':
         defaults:  # these can be overridden for individual fields below

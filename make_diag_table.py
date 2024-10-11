@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
 
-Generate MOM5 diag_table file from diag_table_source.yaml
+Generate MOM diag_table file from diag_table_source.yaml
 Latest version: https://github.com/COSIMA/make_diag_table
 
 The MOM diag_table format is defined here:
 https://github.com/mom-ocean/MOM5/blob/master/src/shared/diag_manager/diag_table.F90
-and some of the available diagnostics are listed here:
+https://mom6.readthedocs.io/en/main/api/generated/pages/Diagnostics.html
+Some of the available MOM5 diagnostics are listed here:
 https://raw.githubusercontent.com/COSIMA/access-om2/master/MOM_diags.txt
 https://github.com/COSIMA/access-om2/wiki/Technical-documentation#MOM5-diagnostics-list
-
+MOM6 diagnostics are output in available_diags.* when you run the model.
 """
 
 from __future__ import print_function
