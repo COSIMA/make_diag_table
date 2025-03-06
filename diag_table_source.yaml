@@ -56,7 +56,7 @@ global_defaults:
     time_sampling: all  # Currently not used.  Please use the string "all".
     reduction_method: mean  # mean, snap, rms, pow##, min, max, or diurnal##
     # reduction_method options:
-    #     mean or average or true: Average from the last time written to the current time. Becomes "average" in diag_table.
+    #     mean or average or true: Average from the last time written to the current time. Becomes "mean" in diag_table.
     #     snap or none or false: No reduction.  Write snapshot of current time step value only. Becomes "none" in diag_table.
     #     rms: Calculate the root mean square from the last time written to the current time.
     #     pow##: Calculate the mean of the power ## from the last time written to the current time.
