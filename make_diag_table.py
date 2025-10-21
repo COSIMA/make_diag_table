@@ -155,14 +155,14 @@ for k, grp in indata['diag_table'].items():
         outstrings.append(', '.join([strout(v) for v in fieldline]))
 
         # Add any auxiliary fields to file, such as cell measures
-        if "auxiliary_fields" in f:
-            if f["auxiliary_fields"] is not None:
-                for aux_field_name, aux_field_dict in f["auxiliary_fields"].items():
+        if 'auxiliary_fields' in f:
+            if f['auxiliary_fields'] is not None:
+                for aux_field_name, aux_field_dict in f['auxiliary_fields'].items():
                     if aux_field_dict is None:
                         aux_field_dict = {}
-                    # Allow changing name of auxiliary fields using "output_name" entry
-                    if "output_name" in aux_field_dict:
-                        aux_output_name = aux_field_dict["output_name"]
+                    # Allow changing name of auxiliary fields using 'output_name' entry
+                    if 'output_name' in aux_field_dict:
+                        aux_output_name = aux_field_dict['output_name']
                     else:
                         aux_output_name = aux_field_name
                     f_aux = {**f, **aux_field_dict}
