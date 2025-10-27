@@ -51,6 +51,8 @@ global_defaults:
 # field section:
     module_name: ocean_model
     field_name:  # set via keys in the fields section of the diag_table section below
+    auxiliary_fields:  # auxiliary fields to be included with every field. This can also be set per category or per field below
+    #     area_t:
     output_name:  # same as field_name unless overridden
     # file_name:  # same as file_name in file section above unless overridden in diag_table section below
     time_sampling: all  # Currently not used.  Please use the string "all".
@@ -218,6 +220,8 @@ diag_table:
             file_name_dimension: 2d  # descriptor for filename, e.g. 3d, 2d, scalar
             output_freq: 1  # integer: output sampling frequency in output_freq_units (0: every timestep; -1: only at end of run)
             output_freq_units: months  # time units for output: years, months, days, hours, minutes, or seconds
+            auxiliary_fields:  # auxiliary fields to be included with every field in this category
+            #     area_t:
         fields:
             agm:
             aredi:
@@ -279,6 +283,8 @@ diag_table:
             output_freq_units: days  # time units for output: years, months, days, hours, minutes, or seconds
         fields:
             eta_t:
+                auxiliary_fields:  # auxiliary fields to be included with this field
+                #     area_t:
             frazil_3d_int_z:
             mld:
             pme_river:
